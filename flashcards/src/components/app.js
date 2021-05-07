@@ -1,43 +1,49 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
-import CollectionsCard from './collectionsCard';
-import ListCollections from './listCollections';
+import CollectionsCard from './collections/collectionsCard';
+import ListCollections from './collections/listCollections';
 
 
-class App extends Component{
-    state = {
+const App = props => {
+    const [state, setState] = useState ({
         collections: [],
-    }
+        flashcards: [],
+    });
+    
+    // state = {
+    //     collections: [],
+    //     flashcards: [],
+    // }
 
-    componentDidMount() {
-        this.getCollections();
-    }
+    useEffect(() => {
+        getCollections();
+    });
 
-    getCollections = async () => {
+    const getCollections = async () => {
         let response = await axios.get(`http://127.0.0.1:8000/collections/`);
-        this.setState({
-            collections: response.data
-        });
-        console.log(this.state.collections);
+        let response2 = await axios.get(`http://127.0.0.1:8000/flashcards/`)
+        setState({collections: response.data, flashcards:response2.data});
+        console.log(state);
     }
 
-    mapCollections(collections){
+    
+
+    const mapCollections = (collections) => {
         return collections.map(collection =>
             <CollectionsCard
             key={collection.id}
             name={collection.name}
             />
-            );
-    }
-
-    render() {
-        return(
-            <div>
-            <ListCollections mapCollections={() => this.mapCollections(this.state.collections)} />
-            </div>
         );
     }
-}
 
+   
+    return(
+        <div>
+        <ListCollections mapCollections={() => mapCollections(state.collections)} collections={state.collections} />
+        </div>
+        );
+
+}
 
 export default App;
