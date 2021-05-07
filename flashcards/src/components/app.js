@@ -1,14 +1,19 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CollectionsCard from './collections/collectionsCard';
 import ListCollections from './collections/listCollections';
+import Flashcard from './flashcards/flashcard';
+import ListFlashcards from './flashcards/listFlashcards';
 
 
 const App = props => {
     const [state, setState] = useState ({
         collections: [],
+        showCollections: true,
         flashcards: [],
     });
+
+    const [showFlashcards, setShowFlashcards] = useState(true);
     
     // state = {
     //     collections: [],
@@ -17,7 +22,7 @@ const App = props => {
 
     useEffect(() => {
         getCollections();
-    });
+    }, []);
 
     const getCollections = async () => {
         let response = await axios.get(`http://127.0.0.1:8000/collections/`);
@@ -26,6 +31,13 @@ const App = props => {
         console.log(state);
     }
 
+    // const onClickCollections = async (event) => {
+
+    // }
+
+    const onClickFlashcards = () => {
+        setState({...state,showCollections: !state.showCollections})
+    }
     
 
     const mapCollections = (collections) => {
@@ -37,10 +49,21 @@ const App = props => {
         );
     }
 
+    const mapFlashcards = (flashcards) => {
+        return flashcards.map(flashcard =>
+            <Flashcard
+                question={flashcard.question}
+                showCollections={state.showCollections}
+            />
+            );
+    }
+
    
     return(
         <div>
+        <button onClick={() => onClickFlashcards()}>Toggle</button>
         <ListCollections mapCollections={() => mapCollections(state.collections)} collections={state.collections} />
+        <ListFlashcards mapFlashcards={() => mapFlashcards(state.flashcards)} flashcards={state.flashcards} />
         </div>
         );
 

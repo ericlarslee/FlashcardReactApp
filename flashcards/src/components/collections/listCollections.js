@@ -5,7 +5,7 @@ const ListCollections = (props) => {
     return (
         <div>
             <ul>
-                {props.mapCollections(props.collections)}
+                {props.mapCollections()}
                 <li>google</li>
             </ul>
         </div>
