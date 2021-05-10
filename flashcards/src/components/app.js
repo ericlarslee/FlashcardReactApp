@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 import CollectionsCard from './collections/collectionsCard';
 import ListCollections from './collections/listCollections';
@@ -7,76 +7,67 @@ import ListFlashcards from './flashcards/listFlashcards';
 
 
 const App = () => {
-    const [state, setState] = useState ({
-        collections: [],
-        showCollections: true,
-        flashcards: [],
-        filterFlashCards: [],
-    });
-
-    // const [showFlashcards, setShowFlashcards] = useState(true);
+    const [collections, setCollections] = useState([]);
+    const [showCollections, setShowCollections] = useState(true);
+    const [flashcards, setFlashcards] = useState([]);
+    const [filterFlashcards, setFilterFlashcards] = useState([]);
     
-    // state = {
-    //     collections: [],
-    //     flashcards: [],
-    // }
 
     useEffect(() => {
         getCollections();
     }, []);
 
-    const getCollections = async () => {
-        let response = await axios.get(`http://127.0.0.1:8000/collections/`);
-        let response2 = await axios.get(`http://127.0.0.1:8000/flashcards/`);
-        console.log(response.keys + 'split' + response2.keys);
-        setState({collections: response.data, flashcards:response2.data});
-        console.log(state.collections.keys)
+    async function getCollections() {
+        try{
+            let response = await axios.get(`http://127.0.0.1:8000/collections/`);
+            setCollections( response.data );
+        } catch (error) {
+            console.log(error.mesage);
+        }
+        try{
+            let response2 = await axios.get(`http://127.0.0.1:8000/flashcards/`);
+            setFlashcards(response2.data);
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
-    // const onClickCollections = async (event) => {
-
-    // }
-
-    const onClickFlashcards = () => {
-        setState({...state,showCollections: !state.showCollections})
+    function onClickCollections(collectionId) {
+        let temp = flashcards.filter(id => collectionId.includes( id.collection ))
+        setFilterFlashcards(temp);
+        setShowCollections(false);
     }
-
-    // onClickCollections = (collectionId) => {
-        
-    // }
 
     //set state for showing front when true, back when false. create incrementor that will allow for shuffling through of flashcards and give the same option for each.
     
 
-    const mapCollections = (collections) => {
+    function mapCollections(collections){
         return collections.map(collection =>
             <CollectionsCard
             key={collection.id}
             name={collection.name}
-            showCollections={state.showCollections}
+            url={collection.url}
+            selectCollection={() => onClickCollections(collection.url)}
             />
         );
     }
 
-    const mapFlashcards = (flashcards) => {
+    function mapFlashcards(flashcards){
         return flashcards.map(flashcard =>
             <Flashcard
+                key={flashcard.id}
                 question={flashcard.question}
-                showCollections={state.showCollections}
                 collection={flashcard.collection}
             />
             );
     }
 
-   
     return(
         <div>
-        <button onClick={() => onClickFlashcards()}>Toggle</button>
-        <ListCollections mapCollections={() => mapCollections(state.collections)} collections={state.collections} />
-        <ListFlashcards mapFlashcards={() => mapFlashcards(state.flashcards)} flashcards={state.flashcards} />
+        <ListCollections mapCollections={() => mapCollections(collections)} collections={collections} showCollections={showCollections} />
+        <ListFlashcards mapFlashcards={() => mapFlashcards(filterFlashcards)} flashcards={flashcards} showCollections={showCollections} />
         </div>
-        );
-
+    );
 }
 
 export default App;

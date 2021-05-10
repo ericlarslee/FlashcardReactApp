@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 
 const ListCollections = (props) => {
+    if (props.showCollections)
     return (
         <div>
             <Container fluid>
@@ -9,6 +10,11 @@ const ListCollections = (props) => {
                     {props.mapCollections()}
                 </Row>
             </Container>
+        </div>
+    );
+    return (
+        <div>
+
         </div>
     );
 }
