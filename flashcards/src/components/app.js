@@ -6,14 +6,15 @@ import Flashcard from './flashcards/flashcard';
 import ListFlashcards from './flashcards/listFlashcards';
 
 
-const App = props => {
+const App = () => {
     const [state, setState] = useState ({
         collections: [],
         showCollections: true,
         flashcards: [],
+        filterFlashCards: [],
     });
 
-    const [showFlashcards, setShowFlashcards] = useState(true);
+    // const [showFlashcards, setShowFlashcards] = useState(true);
     
     // state = {
     //     collections: [],
@@ -26,9 +27,10 @@ const App = props => {
 
     const getCollections = async () => {
         let response = await axios.get(`http://127.0.0.1:8000/collections/`);
-        let response2 = await axios.get(`http://127.0.0.1:8000/flashcards/`)
+        let response2 = await axios.get(`http://127.0.0.1:8000/flashcards/`);
+        console.log(response.keys + 'split' + response2.keys);
         setState({collections: response.data, flashcards:response2.data});
-        console.log(state);
+        console.log(state.collections.keys)
     }
 
     // const onClickCollections = async (event) => {
@@ -38,6 +40,12 @@ const App = props => {
     const onClickFlashcards = () => {
         setState({...state,showCollections: !state.showCollections})
     }
+
+    // onClickCollections = (collectionId) => {
+        
+    // }
+
+    //set state for showing front when true, back when false. create incrementor that will allow for shuffling through of flashcards and give the same option for each.
     
 
     const mapCollections = (collections) => {
@@ -45,6 +53,7 @@ const App = props => {
             <CollectionsCard
             key={collection.id}
             name={collection.name}
+            showCollections={state.showCollections}
             />
         );
     }
@@ -54,6 +63,7 @@ const App = props => {
             <Flashcard
                 question={flashcard.question}
                 showCollections={state.showCollections}
+                collection={flashcard.collection}
             />
             );
     }

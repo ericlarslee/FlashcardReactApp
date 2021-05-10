@@ -5,7 +5,6 @@ const ListFlashcards = (props) => {
         <div>
             <ul>
                 {props.mapFlashcards()}
-                <li> lil stupidass</li>
             </ul>
         </div>
     );

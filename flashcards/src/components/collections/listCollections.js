@@ -1,13 +1,14 @@
 import React from 'react';
-import CardColumns from 'react-bootstrap/CardColumns';
+import { Container, Row } from 'react-bootstrap';
 
 const ListCollections = (props) => {
     return (
         <div>
-            <ul>
-                {props.mapCollections()}
-                <li>google</li>
-            </ul>
+            <Container fluid>
+                <Row md={4} >
+                    {props.mapCollections()}
+                </Row>
+            </Container>
         </div>
     );
 }

@@ -4,12 +4,12 @@ const Flashcard = (props) => {
     if(props.showCollections) {
         return (
         <div>
-            <li>{props.question}</li>
+            <li></li>
         </div>
     );
     } return (
         <div>
-
+            <li>{props.question}</li>
         </div>
     );
 }
