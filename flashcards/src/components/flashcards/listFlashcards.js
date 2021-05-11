@@ -8,7 +8,8 @@ const ListFlashcards = (props) => {
         <div>
             {console.log('here' , props)}
         </div>
-    );return (
+    ); else if (props.showFront && !props.showCollections)
+    return (
         <div>
             {console.log('here' , props)}
             <Card className='flashcard-card' style={{ alignContent: 'justify', background: 'red', border: '3px solid black', width: '280px', height: '200px', margin: '20px'}} >
@@ -17,7 +18,7 @@ const ListFlashcards = (props) => {
                 </Card.Header>
                 <Card.Body>
                     {props.filterFlashcards[props.index].question}
-                <button onClick={() => props.action(props.index)} >Next Card</button>
+                <button onClick={() => props.forwardAction(props.index)} >Next Card</button>
                 </Card.Body>
             </Card>
         </div>

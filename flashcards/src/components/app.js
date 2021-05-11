@@ -13,6 +13,7 @@ const App = () => {
     const [filterFlashcards, setFilterFlashcards] = useState([]);
     const [currentCollectionName, setCurrentCollectionName] = useState();
     const [index, setIndex] = useState(0);
+    const [showFront, setShowFront] = useState(null);
     
 
     useEffect(() => {
@@ -39,9 +40,10 @@ const App = () => {
         setFilterFlashcards(temp);
         setShowCollections(false);
         setCurrentCollectionName(collectionName);
+        setShowFront(true);
     }
 
-    function handleCallback(value){
+    function handleNextCardCallback(value){
         let arrLength = filterFlashcards.length - 1;
         let next = value + 1
         if (next > arrLength){
@@ -83,7 +85,7 @@ const App = () => {
         
         {console.log(filterFlashcards)}
         <ListCollections mapCollections={() => mapCollections(collections)} collections={collections} showCollections={showCollections} />
-        <ListFlashcards filterFlashcards={filterFlashcards} showCollections={showCollections} currentCollectionName={currentCollectionName} index={index} action={handleCallback} />
+        <ListFlashcards filterFlashcards={filterFlashcards} showCollections={showCollections} currentCollectionName={currentCollectionName} index={index} forwardAction={handleNextCardCallback} showFront={showFront} flip={setShowFront}/>
         </div>
     );
 }
