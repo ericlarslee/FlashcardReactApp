@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 import CollectionsCard from './collections/collectionsCard';
 import ListCollections from './collections/listCollections';
-import Flashcard from './flashcards/flashcard';
+// import Flashcard from './flashcards/flashcard';
 import ListFlashcards from './flashcards/listFlashcards';
 
 
@@ -11,6 +11,8 @@ const App = () => {
     const [showCollections, setShowCollections] = useState(true);
     const [flashcards, setFlashcards] = useState([]);
     const [filterFlashcards, setFilterFlashcards] = useState([]);
+    const [currentCollectionName, setCurrentCollectionName] = useState();
+    const [index, setIndex] = useState(0);
     
 
     useEffect(() => {
@@ -32,10 +34,23 @@ const App = () => {
         }
     }
 
-    function onClickCollections(collectionId) {
-        let temp = flashcards.filter(id => collectionId.includes( id.collection ))
+    function onClickCollections(collectionName, collectionId) {
+        let temp = flashcards.filter(flashcard => collectionId.includes( flashcard.collection ));
         setFilterFlashcards(temp);
         setShowCollections(false);
+        setCurrentCollectionName(collectionName);
+    }
+
+    function handleCallback(value){
+        let arrLength = filterFlashcards.length - 1;
+        let next = value + 1
+        if (next > arrLength){
+            setIndex(0);
+        }else if(next<0){
+            setIndex(arrLength);
+        }else{
+        setIndex(next);
+        }
     }
 
     //set state for showing front when true, back when false. create incrementor that will allow for shuffling through of flashcards and give the same option for each.
@@ -45,27 +60,30 @@ const App = () => {
         return collections.map(collection =>
             <CollectionsCard
             key={collection.id}
+            collection={collection}
             name={collection.name}
             url={collection.url}
-            selectCollection={() => onClickCollections(collection.url)}
+            selectCollection={() => onClickCollections(collection.name, collection.url)}
             />
         );
     }
 
-    function mapFlashcards(flashcards){
-        return flashcards.map(flashcard =>
-            <Flashcard
-                key={flashcard.id}
-                question={flashcard.question}
-                collection={flashcard.collection}
-            />
-            );
-    }
+    // function mapFlashcards(flashcards){
+    //     return flashcards.map(flashcard =>
+    //         <Flashcard
+    //             key={flashcard.id}
+    //             question={flashcard.question}
+    //             collection={flashcard.collection}
+    //         />
+    //         );
+    // }
 
     return(
         <div>
+        
+        {console.log(filterFlashcards)}
         <ListCollections mapCollections={() => mapCollections(collections)} collections={collections} showCollections={showCollections} />
-        <ListFlashcards mapFlashcards={() => mapFlashcards(filterFlashcards)} flashcards={flashcards} showCollections={showCollections} />
+        <ListFlashcards filterFlashcards={filterFlashcards} showCollections={showCollections} currentCollectionName={currentCollectionName} index={index} action={handleCallback} />
         </div>
     );
 }
