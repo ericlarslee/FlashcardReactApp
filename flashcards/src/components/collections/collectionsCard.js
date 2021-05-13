@@ -3,7 +3,7 @@ import { Card, Col } from 'react-bootstrap';
 
 const CollectionsCard = (props) => {
     return (
-        <div>
+        <div style= {{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Col >
                 <Card onClick={() => props.selectCollection()} style={{ alignContent: 'center', textAlign: 'center', background: 'red', border: '3px solid black', width: '280px', height: '200px', margin: '20px'}}>
                     <Card.Body style={{textAlign:'center'}}>

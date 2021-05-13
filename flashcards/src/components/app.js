@@ -48,10 +48,19 @@ const App = () => {
         let next = value + 1
         if (next > arrLength){
             setIndex(0);
-        }else if(next<0){
-            setIndex(arrLength);
         }else{
         setIndex(next);
+        setShowFront(true);
+        }
+    }
+
+    function handleLastCardCallback(value){
+        let arrLength = filterFlashcards.length -1;
+        let last = value -1
+        if(last < 0){
+            setIndex(arrLength)
+        }else{
+            setIndex(last);
         }
     }
 
@@ -85,7 +94,7 @@ const App = () => {
         
         {console.log(filterFlashcards)}
         <ListCollections mapCollections={() => mapCollections(collections)} collections={collections} showCollections={showCollections} />
-        <ListFlashcards filterFlashcards={filterFlashcards} showCollections={showCollections} currentCollectionName={currentCollectionName} index={index} forwardAction={handleNextCardCallback} showFront={showFront} flip={setShowFront}/>
+        <ListFlashcards filterFlashcards={filterFlashcards} showCollections={showCollections} currentCollectionName={currentCollectionName} index={index} forwardAction={handleNextCardCallback} backwardAction={handleLastCardCallback} showFront={showFront} flip={setShowFront}/>
         </div>
     );
 }
