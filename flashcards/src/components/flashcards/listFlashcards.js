@@ -2,7 +2,6 @@ import { React } from 'react';
 import { Card } from 'react-bootstrap';
 
 const ListFlashcards = (props) => {
-    // if(props.index === )
     if (props.showCollections)
     return (
         <div>
@@ -30,6 +29,8 @@ const ListFlashcards = (props) => {
                     <br />
                     <button onClick={() => props.backwardAction(props.index)} >Previous Card</button>
                     <button onClick={() => props.forwardAction(props.index)} >Next Card</button>
+                    <br />
+                    <p>{props.index +1}/{props.filterFlashcards.length}</p>
                 </div>
                 </Card.Footer>
             </Card>
